@@ -77,9 +77,9 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             L.getMain().add(mainPage3);
 
         }else{
-            mainPage1 = (PageFragment) L.getOther().get(0);
-            mainPage2 = (PageFragment) L.getOther().get(1);
-            mainPage3 = (PageFragment) L.getOther().get(2);
+            mainPage1 = (PageFragment) L.getMain().get(0);
+            mainPage2 = (PageFragment) L.getMain().get(1);
+            mainPage3 = (PageFragment) L.getMain().get(2);
         }
     }
 
