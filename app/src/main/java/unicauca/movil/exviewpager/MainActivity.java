@@ -1,5 +1,6 @@
 package unicauca.movil.exviewpager;
 
+import android.os.PersistableBundle;
 import android.support.design.widget.NavigationView;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
@@ -24,6 +25,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
     PageFragment mainPage1, mainPage2, mainPage3;
 
+    private int id;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -38,7 +41,12 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         main = new MainFragment();
         other = new OtherFragment();
 
-        putFragment(R.id.container, main);
+        if(savedInstanceState!=null)
+            id = savedInstanceState.getInt("nav");
+        else
+            id = R.id.nav_main;
+
+        navFragment(id);
     }
 
     private void loadMainPages() {
@@ -77,7 +85,15 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
     @Override
     public boolean onNavigationItemSelected(MenuItem item) {
-        switch (item.getItemId()){
+        navFragment(item.getItemId());
+        drawer.closeDrawers();
+
+        return false;
+    }
+
+    private void navFragment(int id){
+        this.id = id;
+        switch (id){
             case R.id.nav_main:
                 putFragment(R.id.container, main);
                 break;
@@ -85,15 +101,18 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 putFragment(R.id.container, other);
                 break;
         }
-
-        drawer.closeDrawers();
-
-        return false;
     }
 
     private void putFragment(int container, Fragment fragment){
         FragmentTransaction ft =  getSupportFragmentManager().beginTransaction();
         ft.replace(container, fragment);
         ft.commit();
+    }
+
+    @Override
+    public void onSaveInstanceState(Bundle outState) {
+        outState.putInt("nav", id);
+        super.onSaveInstanceState(outState);
+
     }
 }
